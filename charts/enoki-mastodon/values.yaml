@@ -17,7 +17,7 @@ mastodon:
   redis:
     # we are managing our own redis instance
     enabled: false
-    hostname: mastodon-redis-leader
+    hostname: mastodon-redis
     auth:
       existingSecret: mastodon-redis
 

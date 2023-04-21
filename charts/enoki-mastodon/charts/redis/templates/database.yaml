@@ -1,12 +1,9 @@
 ---
 apiVersion: redis.redis.opstreelabs.in/v1beta1
-kind: RedisCluster
+kind: Redis
 metadata:
   name: mastodon-redis
 spec:
-  clusterSize: 3
-  clusterVersion: v7
-  persistenceEnabled: true
   kubernetesConfig:
     image: quay.io/opstree/redis:v7.0.5
   storage:
