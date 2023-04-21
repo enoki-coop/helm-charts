@@ -1,2 +1,4 @@
 **/charts/*.tgz
 /charts/*/Chart.lock
+
+.cr-release-packages/
