@@ -1,0 +1,25 @@
+mastodon:
+  mastodon:
+    secrets:
+      existingSecret: "mastodon-secrets"
+    smtp:
+      existingSecret: "mastodon-smtp"
+
+  postgresql:
+    # we are managing our own database instance
+    enabled: false
+    postgresqlHostname: mastodon-primary
+    auth:
+      database: mastodon
+      username: mastodon
+      existingSecret: mastodon-pguser-mastodon
+
+  redis:
+    # we are managing our own redis instance
+    enabled: false
+    hostname: mastodon-redis
+    auth:
+      existingSecret: mastodon-redis
+
+  elasticsearch:
+    enabled: false

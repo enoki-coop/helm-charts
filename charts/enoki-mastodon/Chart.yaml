@@ -1,0 +1,20 @@
+apiVersion: v2
+name: enoki-mastodon
+description: Mastodon deployment specific to Enoki
+
+type: application
+
+version: 0.1.0
+
+appVersion: "4.1.2"
+
+dependencies:
+  - name: mastodon
+    version: "4.0.0"
+  - name: kubernetes-secret-generator
+    version: "3.4.0"
+    repository: "https://helm.mittwald.de"
+  - name: postgresql
+    version: "0.1.0"
+  - name: redis
+    version: "0.1.0"

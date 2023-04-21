@@ -1,3 +1,3 @@
 [submodule "charts/mastodon"]
-	path = charts/mastodon
+	path = charts/enoki-mastodon/charts/mastodon
 	url = git@github.com:enoki-coop/mastodon-chart.git
