@@ -8,11 +8,11 @@ mastodon:
   postgresql:
     # we are managing our own database instance
     enabled: false
-    postgresqlHostname: localhost
+    postgresqlHostname: mastodon-primary
     auth:
-      password: "foobar"
-      # todo
-      # existingSecret: ""
+      database: mastodon
+      username: mastodon
+      existingSecret: mastodon-pguser-mastodon
 
   redis:
     # we are managing our own redis instance

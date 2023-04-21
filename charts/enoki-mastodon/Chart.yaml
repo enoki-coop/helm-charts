@@ -14,3 +14,5 @@ dependencies:
   - name: kubernetes-secret-generator
     version: "3.4.0"
     repository: "https://helm.mittwald.de"
+  - name: postgresql
+    version: "0.1.0"

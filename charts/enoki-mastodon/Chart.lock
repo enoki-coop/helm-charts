@@ -5,5 +5,8 @@ dependencies:
 - name: kubernetes-secret-generator
   repository: https://helm.mittwald.de
   version: 3.4.0
-digest: sha256:ac9feb119eb46a2b7a41183c6714b4b814750f0ed6576c6adf6f732856318d96
-generated: "2023-04-21T13:34:18.427887+02:00"
+- name: postgresql
+  repository: ""
+  version: 0.1.0
+digest: sha256:097dd7e392f312c1cefe79c98e2a6162dbe27d17fa744988bb7a9ef9c8890907
+generated: "2023-04-21T15:35:06.55696+02:00"
