@@ -8,5 +8,8 @@ dependencies:
 - name: postgresql
   repository: ""
   version: 0.1.0
-digest: sha256:097dd7e392f312c1cefe79c98e2a6162dbe27d17fa744988bb7a9ef9c8890907
-generated: "2023-04-21T15:35:06.55696+02:00"
+- name: redis
+  repository: ""
+  version: 0.1.0
+digest: sha256:758b38129474be5ad050f5fdcd4ff47a3dab4569ca141556a4c1040bdbbdb987
+generated: "2023-04-21T16:20:52.770535+02:00"

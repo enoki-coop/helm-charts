@@ -16,3 +16,5 @@ dependencies:
     repository: "https://helm.mittwald.de"
   - name: postgresql
     version: "0.1.0"
+  - name: redis
+    version: "0.1.0"
