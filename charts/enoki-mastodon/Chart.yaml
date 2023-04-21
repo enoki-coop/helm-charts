@@ -1,0 +1,14 @@
+apiVersion: v2
+name: enoki-mastodon
+description: Mastodon deployment specific to Enoki
+
+type: application
+
+version: 0.1.0
+
+appVersion: "4.1.2"
+
+dependencies:
+  - name: mastodon
+    version: "4.0.0"
+    repository: "file://../mastodon"

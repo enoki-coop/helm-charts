@@ -1,0 +1,6 @@
+dependencies:
+- name: mastodon
+  repository: file://../mastodon
+  version: 4.0.0
+digest: sha256:fffd3851d9f8913010285ec7402ddf692910f7e757453dcc05676a57b8569ae4
+generated: "2023-04-21T12:45:20.010466+02:00"
