@@ -12,3 +12,6 @@ dependencies:
   - name: mastodon
     version: "4.0.0"
     repository: "file://../mastodon"
+  - name: kubernetes-secret-generator
+    version: "3.4.0"
+    repository: "https://helm.mittwald.de"
