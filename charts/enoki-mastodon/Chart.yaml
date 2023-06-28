@@ -9,12 +9,15 @@ version: 0.1.1
 appVersion: "4.1.2"
 
 dependencies:
-  - name: mastodon
-    version: "4.0.0"
-  - name: kubernetes-secret-generator
-    version: "3.4.0"
-    repository: "https://helm.mittwald.de"
-  - name: postgresql
-    version: "0.1.0"
-  - name: redis
-    version: "0.1.0"
+- name: mastodon
+  version: "4.0.0"
+- name: kubernetes-secret-generator
+  version: "3.4.0"
+  repository: "https://helm.mittwald.de"
+- name: postgresql
+  version: "0.1.0"
+- name: redis
+  version: "0.1.0"
+- name: tenant
+  version: "5.0.6"
+  repository: "https://operator.min.io/"

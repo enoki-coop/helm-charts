@@ -1,0 +1,1074 @@
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: release-name-kubernetes-secret-generator
+  labels:
+  
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: enoki-mastodon/charts/mastodon/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: release-name-mastodon
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: enoki-mastodon/charts/tenant/templates/tenant-configuration.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myminio-env-configuration
+type: Opaque
+stringData:
+  config.env: |-
+    export MINIO_ROOT_USER="minio"
+    export MINIO_ROOT_PASSWORD="minio123"
+---
+# Source: enoki-mastodon/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mastodon-secrets
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: SECRET_KEY_BASE,OTP_SECRET
+data: {}
+---
+# Source: enoki-mastodon/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mastodon-redis
+data:
+  redis-password: ""
+---
+# Source: enoki-mastodon/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mastodon-smtp
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: password
+data:
+  login: mastodon
+---
+# Source: enoki-mastodon/charts/mastodon/templates/configmap-env.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-mastodon-env
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DB_HOST: mastodon-primary
+  DB_PORT: "5432"
+  DB_NAME: mastodon
+  DB_POOL: "25"
+  DB_USER: mastodon
+  PREPARED_STATEMENTS: "true"
+  DEFAULT_LOCALE: en
+  LOCAL_DOMAIN: mastodon.local
+  # https://devcenter.heroku.com/articles/tuning-glibc-memory-behavior
+  MALLOC_ARENA_MAX: "2"
+  NODE_ENV: "production"
+  RAILS_ENV: "production"
+  REDIS_HOST: mastodon-redis
+  REDIS_PORT: "6379"
+  SMTP_AUTH_METHOD: plain
+  SMTP_CA_FILE: /etc/ssl/certs/ca-certificates.crt
+  SMTP_DELIVERY_METHOD: smtp
+  SMTP_ENABLE_STARTTLS: "auto"
+  SMTP_FROM_ADDRESS: notifications@example.com
+  SMTP_OPENSSL_VERIFY_MODE: peer
+  SMTP_PORT: "587"
+  SMTP_SERVER: smtp.mailgun.org
+  STREAMING_CLUSTER_NUM: "1"
+---
+# Source: enoki-mastodon/charts/mastodon/templates/pvc-assets.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: release-name-mastodon-assets
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName:
+---
+# Source: enoki-mastodon/charts/mastodon/templates/pvc-system.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: release-name-mastodon-system
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName:
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/clusterrole.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  labels:
+  
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  # actual operator functionality
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+      - list
+      - watch
+      - update
+  - apiGroups:
+        - secretgenerator.mittwald.de
+    resources:
+      - basicauths
+      - basicauths/status
+      - sshkeypairs
+      - sshkeypairs/status
+      - stringsecrets
+      - stringsecrets/status
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/clusterrolebinding.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  labels:
+  
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  kind: ClusterRole
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    namespace: "default"
+    name: release-name-kubernetes-secret-generator
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/role.yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  labels:
+  
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  # leader election
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - delete
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - delete
+      - get
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+    verbs:
+      - "get"
+      - "create"
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/rolebinding.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  labels:
+  
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  kind: Role
+  name: "mittwald:release-name-kubernetes-secret-generator"
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    namespace: "default"
+    name: release-name-kubernetes-secret-generator
+---
+# Source: enoki-mastodon/charts/mastodon/templates/service-streaming.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-mastodon-streaming
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4000
+      targetPort: streaming
+      protocol: TCP
+      name: streaming
+  selector:
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: streaming
+---
+# Source: enoki-mastodon/charts/mastodon/templates/service-web.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-mastodon-web
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: web
+---
+# Source: enoki-mastodon/charts/kubernetes-secret-generator/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-kubernetes-secret-generator
+  labels:
+    helm.sh/chart: kubernetes-secret-generator-3.4.0
+    name: kubernetes-secret-generator
+    app.kubernetes.io/name: kubernetes-secret-generator
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v3.4.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kubernetes-secret-generator
+      app.kubernetes.io/name: kubernetes-secret-generator
+      app.kubernetes.io/instance: release-name
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: kubernetes-secret-generator
+        app.kubernetes.io/name: kubernetes-secret-generator
+        app.kubernetes.io/instance: release-name
+    spec:
+      
+      serviceAccountName: release-name-kubernetes-secret-generator
+      securityContext:
+        {}
+      containers:
+        - name: kubernetes-secret-generator
+          securityContext:
+            {}
+          image: quay.io/mittwald/kubernetes-secret-generator:v3.4.0
+          imagePullPolicy: Always
+          args:
+            []
+          ports:
+            - containerPort: 8080
+              name: healthcheck
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: healthcheck
+            initialDelaySeconds: 6
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: healthcheck
+            initialDelaySeconds: 6
+            periodSeconds: 3
+          env:
+            - name: WATCH_NAMESPACE
+              value: 
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "kubernetes-secret-generator"
+            - name: REGENERATE_INSECURE
+              value: "true"
+            - name: SECRET_LENGTH
+              value: "40"
+            - name: USE_METRICS_SERVICE
+              value: "false"
+          resources:
+            {}
+---
+# Source: enoki-mastodon/charts/mastodon/templates/deployment-sidekiq.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-mastodon-sidekiq-all-queues
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: sidekiq-all-queues
+    app.kubernetes.io/part-of: rails
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mastodon
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: sidekiq-all-queues
+      app.kubernetes.io/part-of: rails
+  template:
+    metadata:
+      annotations:
+        # roll the pods to pick up any db migrations or other changes
+        
+        rollme: "1"
+        checksum/config-secrets: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        checksum/config-configmap: "feee60da6b35e679cd3c9ce94f7498ba02a3a0ec6940b4fb3f30051b041b04be"
+        checksum/config-secrets: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      labels:
+        app.kubernetes.io/name: mastodon
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: sidekiq-all-queues
+        app.kubernetes.io/part-of: rails
+    spec:
+      serviceAccountName: release-name-mastodon
+      securityContext:
+        fsGroup: 991
+        runAsGroup: 991
+        runAsUser: 991
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-assets
+        - name: system
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-system
+      containers:
+        - name: mastodon
+          securityContext:
+            {}
+          image: "ghcr.io/mastodon/mastodon:v4.0.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - sidekiq
+            - -c
+            - "25"
+            - -q
+            - "default,8"
+            - -q
+            - "push,6"
+            - -q
+            - "ingress,4"
+            - -q
+            - "mailers,2"
+            - -q
+            - "pull"
+            - -q
+            - "scheduler"
+          envFrom:
+            - configMapRef:
+                name: release-name-mastodon-env
+            - secretRef:
+                name: mastodon-secrets
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-pguser-mastodon
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-redis
+                  key: redis-password
+            - name: "SMTP_LOGIN"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-smtp
+                  key: login
+                  optional: true
+            - name: "SMTP_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-smtp
+                  key: password
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/mastodon/public/assets
+            - name: system
+              mountPath: /opt/mastodon/public/system
+          resources:
+            {}
+---
+# Source: enoki-mastodon/charts/mastodon/templates/deployment-streaming.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-mastodon-streaming
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mastodon
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: streaming
+  template:
+    metadata:
+      annotations:
+        # roll the pods to pick up any db migrations or other changes
+        
+        rollme: "1"
+        checksum/config-secrets: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        checksum/config-configmap: "feee60da6b35e679cd3c9ce94f7498ba02a3a0ec6940b4fb3f30051b041b04be"
+      labels:
+        app.kubernetes.io/name: mastodon
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: streaming
+    spec:
+      serviceAccountName: release-name-mastodon
+      securityContext:
+        fsGroup: 991
+        runAsGroup: 991
+        runAsUser: 991
+      containers:
+        - name: mastodon-streaming
+          image: "ghcr.io/mastodon/mastodon:v4.0.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - node
+            - ./streaming
+          envFrom:
+            - configMapRef:
+                name: release-name-mastodon-env
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-pguser-mastodon
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-redis
+                  key: redis-password
+            - name: "PORT"
+              value: "4000"
+          ports:
+            - name: streaming
+              containerPort: 4000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/v1/streaming/health
+              port: streaming
+          readinessProbe:
+            httpGet:
+              path: /api/v1/streaming/health
+              port: streaming
+---
+# Source: enoki-mastodon/charts/mastodon/templates/deployment-web.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-mastodon-web
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mastodon
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: web
+      app.kubernetes.io/part-of: rails
+  template:
+    metadata:
+      annotations:
+        # roll the pods to pick up any db migrations or other changes
+        
+        rollme: "1"
+        checksum/config-secrets: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        checksum/config-configmap: "feee60da6b35e679cd3c9ce94f7498ba02a3a0ec6940b4fb3f30051b041b04be"
+      labels:
+        app.kubernetes.io/name: mastodon
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: web
+        app.kubernetes.io/part-of: rails
+    spec:
+      serviceAccountName: release-name-mastodon
+      securityContext:
+        fsGroup: 991
+        runAsGroup: 991
+        runAsUser: 991
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-assets
+        - name: system
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-system
+      containers:
+        - name: mastodon-web
+          image: "ghcr.io/mastodon/mastodon:v4.0.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - puma
+            - -C
+            - config/puma.rb
+          envFrom:
+            - configMapRef:
+                name: release-name-mastodon-env
+            - secretRef:
+                name: mastodon-secrets
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-pguser-mastodon
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-redis
+                  key: redis-password
+            - name: "PORT"
+              value: "3000"
+            - name: "MIN_THREADS"
+              value: "5"
+            - name: "MAX_THREADS"
+              value: "5"
+            - name: "WEB_CONCURRENCY"
+              value: "2"
+            - name: "PERSISTENT_TIMEOUT"
+              value: "20"
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/mastodon/public/assets
+            - name: system
+              mountPath: /opt/mastodon/public/system
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+---
+# Source: enoki-mastodon/charts/mastodon/templates/cronjob-media-remove.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: release-name-mastodon-media-remove
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  schedule: 0 0 * * 0
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: release-name-mastodon-media-remove
+        spec:
+          restartPolicy: OnFailure
+          # ensure we run on the same node as the other rails components; only
+          # required when using PVCs that are ReadWriteOnce
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/part-of
+                        operator: In
+                        values:
+                          - rails
+                  topologyKey: kubernetes.io/hostname
+          volumes:
+            - name: assets
+              persistentVolumeClaim:
+                claimName: release-name-mastodon-assets
+            - name: system
+              persistentVolumeClaim:
+                claimName: release-name-mastodon-system
+          containers:
+            - name: release-name-mastodon-media-remove
+              image: "ghcr.io/mastodon/mastodon:v4.0.2"
+              imagePullPolicy: IfNotPresent
+              command:
+                - bin/tootctl
+                - media
+                - remove
+              envFrom:
+                - configMapRef:
+                    name: release-name-mastodon-env
+                - secretRef:
+                    name: mastodon-secrets
+              env:
+                - name: "DB_PASS"
+                  valueFrom:
+                    secretKeyRef:
+                      name: mastodon-pguser-mastodon
+                      key: password
+                - name: "REDIS_PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: mastodon-redis
+                      key: redis-password
+                - name: "PORT"
+                  value: "3000"
+              volumeMounts:
+                - name: assets
+                  mountPath: /opt/mastodon/public/assets
+                - name: system
+                  mountPath: /opt/mastodon/public/system
+---
+# Source: enoki-mastodon/charts/mastodon/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: release-name-mastodon
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  tls:
+    - hosts:
+        - "mastodon.local"
+      secretName: mastodon-tls
+  rules:
+    - host: "mastodon.local"
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: release-name-mastodon-web
+                port:
+                  number: 3000
+            pathType: Prefix
+          - path: /api/v1/streaming
+            backend:
+              service:
+                name: release-name-mastodon-streaming
+                port:
+                  number: 4000
+            pathType: Prefix
+---
+# Source: enoki-mastodon/charts/tenant/templates/api-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mastotest
+spec:
+  rules:
+    - host: api.s3.enoki.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  name: https-minio
+---
+# Source: enoki-mastodon/charts/tenant/templates/console-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mastotest-console
+spec:
+  rules:
+    - host: console.s3.enoki.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mastotest-console
+                port:
+                  name: https-console
+---
+# Source: enoki-mastodon/charts/postgresql/templates/databases.yaml
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: mastodon
+spec:
+  postgresVersion: 14
+  instances:
+    - name: mastodon
+      dataVolumeClaimSpec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+  backups:
+    pgbackrest:
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - "ReadWriteOnce"
+              resources:
+                requests:
+                  storage: 1Gi
+---
+# Source: enoki-mastodon/charts/redis/templates/database.yaml
+apiVersion: redis.redis.opstreelabs.in/v1beta1
+kind: Redis
+metadata:
+  name: mastodon-redis
+spec:
+  kubernetesConfig:
+    image: quay.io/opstree/redis:v7.0.5
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+---
+# Source: enoki-mastodon/charts/tenant/templates/tenant.yaml
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: mastotest
+  ## Optionally pass labels to be applied to the statefulset pods
+  labels:
+    app: minio
+  ## Annotations for MinIO Tenant Pods
+  annotations:
+    prometheus.io/path: /minio/v2/metrics/cluster
+    prometheus.io/port: "9000"
+    prometheus.io/scrape: "true"
+    prometheus.io/scheme: "http"
+spec:
+  image: quay.io/minio/minio:RELEASE.2023-06-23T20-26-00Z
+  imagePullPolicy: IfNotPresent
+  ## Secret with default environment variable configurations
+  configuration:
+    name: mastotest-env-configuration
+  pools:
+    - servers: 4
+      name: mastotest-pool
+      volumesPerServer: 4
+      volumeClaimTemplate:
+        metadata:
+          name: data
+        spec:
+          storageClassName: hcloud-volumes
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 128Gi
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containerSecurityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+  mountPath: /export
+  subPath: /data
+  requestAutoCert: true
+  features:
+    bucketDNS: false
+  podManagementPolicy: Parallel
+  prometheusOperator: false
+  logging:
+    anonymous: true
+    json: true
+    quiet: true
+---
+# Source: enoki-mastodon/charts/mastodon/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-mastodon-test-connection"
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['release-name-mastodon-web:80']
+  restartPolicy: Never
+---
+# Source: enoki-mastodon/charts/mastodon/templates/job-assets-precompile.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: release-name-mastodon-assets-precompile
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-2"
+spec:
+  template:
+    metadata:
+      name: release-name-mastodon-assets-precompile
+    spec:
+      restartPolicy: Never
+      # ensure we run on the same node as the other rails components; only
+      # required when using PVCs that are ReadWriteOnce
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/part-of
+                    operator: In
+                    values:
+                      - rails
+              topologyKey: kubernetes.io/hostname
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-assets
+        - name: system
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-system
+      containers:
+        - name: release-name-mastodon-assets-precompile
+          image: "ghcr.io/mastodon/mastodon:v4.0.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+            - -c
+            - |
+                bundle exec rake assets:precompile && yarn cache clean
+          envFrom:
+            - configMapRef:
+                name: release-name-mastodon-env
+            - secretRef:
+                name: mastodon-secrets
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-pguser-mastodon
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-redis
+                  key: redis-password
+            - name: "PORT"
+              value: "3000"
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/mastodon/public/assets
+            - name: system
+              mountPath: /opt/mastodon/public/system
+---
+# Source: enoki-mastodon/charts/mastodon/templates/job-db-migrate.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: release-name-mastodon-db-migrate
+  labels:
+    helm.sh/chart: mastodon-4.0.0
+    app.kubernetes.io/name: mastodon
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v4.0.2"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": post-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-2"
+spec:
+  template:
+    metadata:
+      name: release-name-mastodon-db-migrate
+    spec:
+      restartPolicy: Never
+      # ensure we run on the same node as the other rails components; only
+      # required when using PVCs that are ReadWriteOnce
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/part-of
+                    operator: In
+                    values:
+                      - rails
+              topologyKey: kubernetes.io/hostname
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-assets
+        - name: system
+          persistentVolumeClaim:
+            claimName: release-name-mastodon-system
+      containers:
+        - name: release-name-mastodon-db-migrate
+          image: "ghcr.io/mastodon/mastodon:v4.0.2"
+          imagePullPolicy: IfNotPresent
+          command:
+            - bundle
+            - exec
+            - rake
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: release-name-mastodon-env
+            - secretRef:
+                name: mastodon-secrets
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-pguser-mastodon
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mastodon-redis
+                  key: redis-password
+            - name: "PORT"
+              value: "3000"
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/mastodon/public/assets
+            - name: system
+              mountPath: /opt/mastodon/public/system

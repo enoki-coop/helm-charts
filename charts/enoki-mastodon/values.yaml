@@ -23,3 +23,59 @@ mastodon:
 
   elasticsearch:
     enabled: false
+
+  s3:
+    enabled: true
+    access_key: "NtOSs8wZoOX2Lz9X"
+    access_secret: "4PxrglxxsSbcmSo3wCpphKfo8nyeDMd3"
+    bucket: "mastodon"
+
+tenant:
+  tenant:
+    configuration:
+      name: mastotest-env-configuration
+    name: mastotest
+    pools:
+    ## Servers specifies the number of MinIO Tenant Pods / Servers in this pool.
+    ## For standalone mode, supply 1. For distributed mode, supply 4 or more.
+    ## Note that the operator does not support upgrading from standalone to distributed mode.
+    - servers: 4
+      ## custom name for the pool
+      name: mastotest-pool
+      ## volumesPerServer specifies the number of volumes attached per MinIO Tenant Pod / Server.
+      volumesPerServer: 4
+      ## size specifies the capacity per volume
+      size: 128Gi
+      storageClassName: hcloud-volumes
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
+      containerSecurityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+    metrics:
+      enabled: true
+      port: 9000
+      protocol: http
+    secrets:
+      name: mastotest-env-configuration
+      # MinIO root user and password
+      accessKey: minio
+      secretKey: minio123
+      # features:
+      #   bucketDNS: true
+      #   domains: "buckets.s3.enoki.tech"
+  ingress:
+    api:
+      enabled: true
+      host: api.s3.enoki.tech
+      path: /
+      pathType: Prefix
+    console:
+      enabled: true
+      host: console.s3.enoki.tech
+      path: /
+      pathType: Prefix
