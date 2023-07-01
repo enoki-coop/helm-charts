@@ -12,7 +12,7 @@ spec:
           - "ReadWriteOnce"
         resources:
           requests:
-            storage: 1Gi
+            storage: {{ .Values.storage.database }}
   backups:
     pgbackrest:
       repos:
@@ -23,4 +23,4 @@ spec:
                 - "ReadWriteOnce"
               resources:
                 requests:
-                  storage: 1Gi
+                  storage: {{ .Values.storage.backups }}

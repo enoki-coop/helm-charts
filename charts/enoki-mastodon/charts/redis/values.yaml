@@ -1,1 +1,4 @@
 install_operator: false
+
+storage:
+  persistence: 1Gi

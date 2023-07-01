@@ -1,1 +1,5 @@
 install_operator: false
+
+storage:
+  database: 1Gi
+  backups: 1Gi
