@@ -14,6 +14,7 @@ dependencies:
   - name: kubernetes-secret-generator
     version: "3.4.0"
     repository: "https://helm.mittwald.de"
+    condition: install_operator
   - name: postgresql
     version: "0.1.0"
   - name: redis
