@@ -13,3 +13,6 @@ spec:
         resources:
           requests:
             storage: 1Gi
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
