@@ -4,7 +4,7 @@ description: Mastodon deployment specific to Enoki
 
 type: application
 
-version: 0.1.1
+version: 0.1.2
 
 appVersion: "4.1.2"
 
@@ -16,6 +16,6 @@ dependencies:
     repository: "https://helm.mittwald.de"
     condition: install_operator
   - name: postgresql
-    version: "0.1.0"
+    version: "0.1.1"
   - name: redis
-    version: "0.1.0"
+    version: "0.1.1"
