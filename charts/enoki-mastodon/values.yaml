@@ -3,7 +3,35 @@ mastodon:
     secrets:
       existingSecret: "mastodon-secrets"
     smtp:
-      existingSecret: "mastodon-smtp"
+      #  existingSecret: "mastodon-smtp"
+      from_address: dictvm@dictvm.org
+      server: smtp-relay.brevo.com
+      login: dictvm@dictvm.org
+      password: "QObtSvPCz2Tmg5Aw"
+      existingSecret:
+    local_domain: mastodon.infra.enoki.tech
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      nginx.ingress.kubernetes.io/proxy-body-size: 40m
+      nginx.org/client-max-body-size: 40m
+    hosts:
+    - host: mastodon.infra.enoki.tech
+      paths:
+      - path: '/'
+    tls:
+    - secretName: mastodon-tls
+      hosts:
+      - mastodon.infra.enoki.tech
+
+  s3:
+    enabled: true
+    access_key: "NtOSs8wZoOX2Lz9X"
+    access_secret: "4PxrglxxsSbcmSo3wCpphKfo8nyeDMd3"
+    bucket: "mastodon"
 
   postgresql:
     # we are managing our own database instance
@@ -20,6 +48,9 @@ mastodon:
     hostname: mastodon-redis
     auth:
       existingSecret: mastodon-redis
+    podSecurityContext:
+      runAsUser: 1000
+      fsGroup: 1000
 
   elasticsearch:
     enabled: false
