@@ -8,6 +8,6 @@ version: 0.1.1
 
 dependencies:
   - name: redis-operator
-    version: "0.14.3"
+    version: "0.15.3"
     repository: "https://ot-container-kit.github.io/helm-charts/"
     condition: install_operator
