@@ -42,6 +42,40 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "mastodon.fullname" . }}-system
       {{- end }}
+      initContainers:
+        - name: {{ include "mastodon.fullname" . }}-db-migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - bundle
+            - exec
+            - rake
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: {{ include "mastodon.fullname" . }}-env
+            - secretRef:
+                name: {{ template "mastodon.secretName" . }}
+          env:
+            - name: "DB_PASS"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mastodon.postgresql.secretName" . }}
+                  key: password
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mastodon.redis.secretName" . }}
+                  key: redis-password
+            - name: "PORT"
+              value: {{ .Values.mastodon.web.port | quote }}
+          {{- if (not .Values.mastodon.s3.enabled) }}
+          volumeMounts:
+            - name: assets
+              mountPath: /opt/mastodon/public/assets
+            - name: system
+              mountPath: /opt/mastodon/public/system
+          {{- end }}
       containers:
         - name: {{ .Chart.Name }}-web
           {{- with (default .Values.securityContext .Values.mastodon.web.securityContext) }}
