@@ -1,9 +1,9 @@
 mastodon:
   mastodon:
     secrets:
-      existingSecret: "mastodon-secrets"
+      existingSecret: "mastodon-generated-secrets"
     smtp:
-      existingSecret: "mastodon-smtp"
+      existingSecret: "mastodon-generated-smtp"
 
   postgresql:
     # we are managing our own database instance
@@ -19,7 +19,7 @@ mastodon:
     enabled: false
     hostname: mastodon-redis
     auth:
-      existingSecret: mastodon-redis
+      existingSecret: mastodon-generated-redis
 
   elasticsearch:
     enabled: false
