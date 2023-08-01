@@ -7,3 +7,5 @@ chart-repos:
   - bitnami-git=https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
   - mittwald=https://helm.mittwald.de
   - ot-container-kit=https://ot-container-kit.github.io/helm-charts/
+helm-extra-set-args:
+  - "--set=global.install_operator=true"
