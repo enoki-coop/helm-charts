@@ -1,4 +1,4 @@
-name: Lint and Test Charts
+name: CI
 
 on:
   pull_request:
@@ -11,6 +11,7 @@ on:
 
 jobs:
   lint-test:
+    name: Lint & Test
     runs-on: ubuntu-latest
     env:
       CT_TARGET_BRANCH: ${{ github.base_ref || 'main' }}
