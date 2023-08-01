@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - chore/ci
   schedule:
     # https://crontab.guru/#20_4_*_*_0
     - cron: "20 4 * * 0"
