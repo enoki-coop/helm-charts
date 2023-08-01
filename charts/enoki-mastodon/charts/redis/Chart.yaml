@@ -4,10 +4,10 @@ description: Redis deployment for Mastodon
 
 type: application
 
-version: 0.1.1
+version: 0.2.0
 
 dependencies:
   - name: redis-operator
     version: "0.14.3"
     repository: "https://ot-container-kit.github.io/helm-charts/"
-    condition: install_operator
+    condition: global.install_operator

@@ -1,4 +1,5 @@
-install_operator: false
-
 storage:
   persistence: 1Gi
+
+global:
+  install_operator: false

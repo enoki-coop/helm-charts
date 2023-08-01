@@ -24,4 +24,5 @@ mastodon:
   elasticsearch:
     enabled: false
 
-install_operator: false
+global:
+  install_operator: false
