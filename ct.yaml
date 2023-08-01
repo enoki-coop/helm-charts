@@ -4,5 +4,4 @@ chart-dirs:
 chart-repos:
   - bitnami-git=https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
   - mittwald=https://helm.mittwald.de
-  - crunchydata=oci://registry.developers.crunchydata.com/crunchydata
   - ot-container-kit=https://ot-container-kit.github.io/helm-charts/
