@@ -1,4 +1,6 @@
 # See https://github.com/helm/chart-testing#configuration
+validate-maintainers: false
+lint-conf: lintconf.yaml
 chart-dirs:
   - charts
 chart-repos:

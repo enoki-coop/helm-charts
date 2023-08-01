@@ -1,0 +1,6 @@
+extends: relaxed
+
+rules:
+  line-length:
+    ignore: |
+      charts/mastodon/values.yaml
