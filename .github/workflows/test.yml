@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - chore/ci
+  schedule:
+    # https://crontab.guru/#20_4_*_*_0
+    - cron: "20 4 * * 0"
+
+jobs:
+  lint-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    env:
+      CT_TARGET_BRANCH: ${{ github.base_ref || 'main' }}
+      CT_ALL: ${{ github.event_name != 'pull_request' && 'true' || 'false'  }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.1
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          check-latest: true
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.4.0
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --config ct.yaml)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run chart-testing (lint)
+        if: github.event_name != 'pull_request' || steps.list-changed.outputs.changed == 'true'
+        run: ct lint --config ct.yaml
+
+      - name: Create kind cluster
+        if: github.event_name != 'pull_request' || steps.list-changed.outputs.changed == 'true'
+        uses: helm/kind-action@v1.8.0
+
+      - name: Run chart-testing (install)
+        if: github.event_name != 'pull_request' || steps.list-changed.outputs.changed == 'true'
+        run: |
+          # hack to get CRDs in place
+          kubectl create -k https://github.com/CrunchyData/postgres-operator-examples/kustomize/install/crd
+          kubectl create -k https://github.com/OT-CONTAINER-KIT/redis-operator/config/crd
+
+          ct install --config ct.yaml

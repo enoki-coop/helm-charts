@@ -1,0 +1,12 @@
+# See https://github.com/helm/chart-testing#configuration
+validate-maintainers: false
+lint-conf: lintconf.yaml
+chart-dirs:
+  - charts
+chart-repos:
+  - bitnami-git=https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+  - mittwald=https://helm.mittwald.de
+  - ot-container-kit=https://ot-container-kit.github.io/helm-charts/
+
+# the clean up gets stuck on deleted finalizers
+skip-clean-up: true

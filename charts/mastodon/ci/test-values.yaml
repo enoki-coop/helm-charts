@@ -1,0 +1,17 @@
+# Chart values used for testing the Helm chart.
+
+mastodon:
+  secrets:
+    secret_key_base: dummy-secret_key_base
+    otp_secret: dummy-otp_secret
+    vapid:
+      private_key: dummy-vapid-private_key
+      public_key: dummy-vapid-public_key
+
+  smtp:
+    login: foo@example.com
+    password: dummy-smtp-password
+
+# takes too long to include in testing
+elasticsearch:
+  enabled: false

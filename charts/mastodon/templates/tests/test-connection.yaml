@@ -11,5 +11,8 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "mastodon.fullname" . }}-web:{{ .Values.service.port }}']
+      args:
+        - '{{ include "mastodon.fullname" . }}-web:{{ .Values.mastodon.web.port }}'
+        - '--header=x-forwarded-proto:https'
+        - '--header=Host:mastodon.local'
   restartPolicy: Never
