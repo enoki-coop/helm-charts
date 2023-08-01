@@ -54,4 +54,9 @@ jobs:
 
       - name: Run chart-testing (install)
         if: github.event_name != 'pull_request' || steps.list-changed.outputs.changed == 'true'
-        run: ct install --config ct.yaml
+        run: |
+          # hack to get CRDs in place
+          kubectl create -k https://github.com/CrunchyData/postgres-operator-examples/kustomize/install/crd
+          kubectl create -k https://github.com/OT-CONTAINER-KIT/redis-operator/config/crd
+
+          ct install --config ct.yaml
