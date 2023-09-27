@@ -4,12 +4,12 @@ dependencies:
   version: 19.0.1
 - name: postgresql
   repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
-  version: 11.1.3
+  version: 12.12.10
 - name: redis
   repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
   version: 16.13.2
 - name: common
   repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
   version: 2.2.4
-digest: sha256:621096043b83351335f4004c02b54837379cdb0d69b6b91f5ad6836dc6903f8c
-generated: "2023-04-21T13:19:18.225094+02:00"
+digest: sha256:f347776c2d612dd4c01c10eb6a7ea8b034128c5b55621d8b5e9bbbd2c0800511
+generated: "2023-09-27T10:59:10.177342798Z"
