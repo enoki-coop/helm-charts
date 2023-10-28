@@ -36,5 +36,5 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
   - name: common
-    version: 2.2.4
+    version: 2.13.3
     repository: https://charts.bitnami.com/bitnami
