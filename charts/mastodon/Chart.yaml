@@ -24,7 +24,7 @@ appVersion: v4.1.6
 
 dependencies:
   - name: elasticsearch
-    version: 19.0.1
+    version: 19.13.5
     repository: https://charts.bitnami.com/bitnami
     condition: elasticsearch.enabled
   - name: postgresql
