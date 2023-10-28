@@ -89,7 +89,7 @@ spec:
             - name: "REDIS_URL"
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mastodon.redis.secretName" . }}
+                  name: {{ template "mastodon.redis.secretName" $context }}
                   key: private_uri
             - name: "SMTP_LOGIN"
               valueFrom:
