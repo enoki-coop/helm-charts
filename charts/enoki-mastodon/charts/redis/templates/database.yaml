@@ -6,6 +6,9 @@ metadata:
 spec:
   kubernetesConfig:
     image: quay.io/opstree/redis:v7.0.12
+    redisSecret:
+      name: mastodon-generated-redis
+      key: password
   storage:
     volumeClaimTemplate:
       spec:
