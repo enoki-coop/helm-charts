@@ -10,8 +10,8 @@ appVersion: 4.2.1
 
 dependencies:
   - name: mastodon
-    version: "4.0.8"
-    repository: file://../mastodon
+    version: "4.0.9"
+    repository: https://enoki-coop.github.io/helm-charts/
   - name: kubernetes-secret-generator
     version: "3.4.0"
     repository: "https://helm.mittwald.de"
