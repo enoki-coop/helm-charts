@@ -58,6 +58,14 @@ spec:
                   key: password
             - name: "PORT"
               value: {{ .Values.mastodon.streaming.port | quote }}
+            {{ with .Values.postgresql.sslMode }}
+            - name: "DB_SSLMODE"
+              value: {{ . | quote }}
+            {{- end }}
+            {{ with .Values.postgresql.caSecretRef }}
+            - name: "NODE_EXTRA_CA_CERTS"
+              value: "/caSecret/ca.crt"
+            {{- end }}
           ports:
             - name: streaming
               containerPort: {{ .Values.mastodon.streaming.port }}
@@ -74,6 +82,12 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.postgresql.caSecretRef }}
+          volumeMounts:
+            - name: ca-secret
+              mountPath: /caSecret/
+              readOnly: true
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -85,4 +99,13 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{ with .Values.postgresql.caSecretRef }}
+      volumes:
+        - name: ca-secret
+          secret:
+            secretName: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: ca.crt
       {{- end }}
