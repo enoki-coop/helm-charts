@@ -16,7 +16,7 @@ spec:
   backups:
     pgbackrest:
       repos:
-        - name: mastodon-postgres-backups
+        - name: repo1
           volume:
             volumeClaimSpec:
               accessModes:
