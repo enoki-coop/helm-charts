@@ -3,6 +3,30 @@ entries:
   enoki-mastodon:
   - apiVersion: v2
     appVersion: 4.2.1
+    created: "2023-10-29T12:31:32.410710196Z"
+    dependencies:
+    - name: mastodon
+      repository: file://../mastodon
+      version: 4.0.8
+    - condition: global.install_operator
+      name: kubernetes-secret-generator
+      repository: https://helm.mittwald.de
+      version: 3.4.0
+    - name: postgresql
+      repository: ""
+      version: 0.2.0
+    - name: redis
+      repository: ""
+      version: 0.2.0
+    description: Mastodon deployment specific to Enoki
+    digest: c2c6f439b613473788313eecde4763c8254fb8ba73a92f840bac0aa73fa323dd
+    name: enoki-mastodon
+    type: application
+    urls:
+    - https://github.com/enoki-coop/helm-charts/releases/download/enoki-mastodon-0.3.4/enoki-mastodon-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: 4.2.1
     created: "2023-10-29T12:26:06.02976542Z"
     dependencies:
     - name: mastodon
@@ -277,4 +301,4 @@ entries:
     urls:
     - https://github.com/enoki-coop/helm-charts/releases/download/mastodon-4.0.3/mastodon-4.0.3.tgz
     version: 4.0.3
-generated: "2023-10-29T12:26:06.02980552Z"
+generated: "2023-10-29T12:31:32.410752197Z"
