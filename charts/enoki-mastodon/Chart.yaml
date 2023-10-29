@@ -4,7 +4,7 @@ description: Mastodon deployment specific to Enoki
 
 type: application
 
-version: 0.3.5
+version: 0.3.6
 
 appVersion: 4.2.1
 
