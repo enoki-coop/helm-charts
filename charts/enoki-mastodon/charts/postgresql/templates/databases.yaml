@@ -2,11 +2,11 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: mastodon
+  name: mastodon-postgres
 spec:
-  postgresVersion: 14
+  postgresVersion: 15
   instances:
-    - name: mastodon
+    - name: mastodon-postgres
       dataVolumeClaimSpec:
         accessModes:
           - "ReadWriteOnce"
@@ -16,7 +16,7 @@ spec:
   backups:
     pgbackrest:
       repos:
-        - name: repo1
+        - name: mastodon-postgres-backups
           volume:
             volumeClaimSpec:
               accessModes:

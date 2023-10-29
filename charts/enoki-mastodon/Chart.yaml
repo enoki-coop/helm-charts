@@ -4,13 +4,13 @@ description: Mastodon deployment specific to Enoki
 
 type: application
 
-version: 0.3.0
+version: 0.3.1
 
-appVersion: "4.1.5"
+appVersion: 4.2.1
 
 dependencies:
   - name: mastodon
-    version: "4.0.3"
+    version: "4.0.8"
     repository: file://../mastodon
   - name: kubernetes-secret-generator
     version: "3.4.0"
