@@ -12,7 +12,7 @@ mastodon:
     auth:
       database: mastodon-postgres
       username: mastodon-postgres
-      existingSecret: mastodon-postgres-pguser-mastodon
+      existingSecret: mastodon-postgres-pguser-mastodon-postgres
 
   redis:
     # we are managing our own redis instance
