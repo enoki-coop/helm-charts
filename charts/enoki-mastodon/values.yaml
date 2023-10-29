@@ -8,11 +8,11 @@ mastodon:
   postgresql:
     # we are managing our own database instance
     enabled: false
-    postgresqlHostname: mastodon-primary
+    postgresqlHostname: mastodon-postgres-primary
     auth:
-      database: mastodon
-      username: mastodon
-      existingSecret: mastodon-pguser-mastodon
+      database: mastodon-postgres
+      username: mastodon-postgres
+      existingSecret: mastodon-postgres-pguser-mastodon
 
   redis:
     # we are managing our own redis instance
