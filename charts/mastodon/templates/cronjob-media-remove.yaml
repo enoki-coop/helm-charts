@@ -64,7 +64,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: {{ template "mastodon.redis.secretName" . }}
-                      key: redis-password
+                      key: password
                 - name: "PORT"
                   value: {{ .Values.mastodon.web.port | quote }}
                 {{- if (and .Values.mastodon.s3.enabled .Values.mastodon.s3.existingSecret) }}
