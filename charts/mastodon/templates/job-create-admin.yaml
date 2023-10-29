@@ -67,11 +67,11 @@ spec:
                 secretKeyRef:
                   name: {{ template "mastodon.postgresql.secretName" . }}
                   key: password
-            - name: "REDIS_URL"
+            - name: "REDIS_PASSWORD"
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mastodon.redis.secretName" . }}
-                  key: private_uri
+                  key: redis-password
             - name: "PORT"
               value: {{ .Values.mastodon.web.port | quote }}
           {{- if (not .Values.mastodon.s3.enabled) }}

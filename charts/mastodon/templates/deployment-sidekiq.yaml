@@ -86,11 +86,11 @@ spec:
                 secretKeyRef:
                   name: {{ template "mastodon.postgresql.secretName" $context }}
                   key: password
-            - name: "REDIS_URL"
+            - name: "REDIS_PASSWORD"
               valueFrom:
                 secretKeyRef:
                   name: {{ template "mastodon.redis.secretName" $context }}
-                  key: private_uri
+                  key: password
             - name: "SMTP_LOGIN"
               valueFrom:
                 secretKeyRef:
