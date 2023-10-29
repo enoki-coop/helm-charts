@@ -4,7 +4,7 @@ kind: PostgresCluster
 metadata:
   name: mastodon-postgres
 spec:
-  postgresVersion: 15
+  postgresVersion: 14
   instances:
     - name: mastodon-postgres
       dataVolumeClaimSpec:
