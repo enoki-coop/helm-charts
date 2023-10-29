@@ -13,6 +13,10 @@ mastodon:
       database: mastodon-postgres
       username: mastodon-postgres
       existingSecret: mastodon-postgres-pguser-mastodon-postgres
+    caSecretRef:
+      name: mastodon-postgres-cluster-cert
+      key: ca.crt
+    sslMode: verify-ca
 
   redis:
     # we are managing our own redis instance
