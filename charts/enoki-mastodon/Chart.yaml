@@ -4,13 +4,13 @@ description: Mastodon deployment specific to Enoki
 
 type: application
 
-version: 0.3.7
+version: 0.3.8
 
 appVersion: 4.2.1
 
 dependencies:
   - name: mastodon
-    version: "4.0.8"
+    version: "4.0.9"
     repository: https://enoki-coop.github.io/helm-charts/
   - name: kubernetes-secret-generator
     version: "3.4.0"
