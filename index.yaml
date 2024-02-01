@@ -314,6 +314,20 @@ entries:
     version: 0.1.1
   mastodon:
   - apiVersion: v2
+    appVersion: v4.2.5
+    created: "2024-02-01T20:51:14.467519866Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.13.3
+    description: Mastodon is a free, open-source social network server based on ActivityPub.
+    digest: 8930b43e938320e001ca0a269ee2a96995a66f8cc85e964a2302c8724e3d04f3
+    name: mastodon
+    type: application
+    urls:
+    - https://github.com/enoki-coop/helm-charts/releases/download/mastodon-4.0.10/mastodon-4.0.10.tgz
+    version: 4.0.10
+  - apiVersion: v2
     appVersion: v4.2.1
     created: "2023-10-29T18:18:36.433523106Z"
     dependencies:
@@ -411,4 +425,4 @@ entries:
     urls:
     - https://github.com/enoki-coop/helm-charts/releases/download/mastodon-4.0.3/mastodon-4.0.3.tgz
     version: 4.0.3
-generated: "2023-10-29T18:21:10.617004088Z"
+generated: "2024-02-01T20:51:14.467557025Z"
