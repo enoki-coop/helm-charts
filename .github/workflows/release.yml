@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - configure-chart-releaser-action
 
 jobs:
   release:
