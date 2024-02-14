@@ -11,7 +11,7 @@ appVersion: v4.2.6
 
 dependencies:
   - name: mastodon
-    version: "4.0.10"
+    version: "4.0.11"
     repository: https://enoki-coop.github.io/helm-charts/
   - name: kubernetes-secret-generator
     version: "3.4.0"
