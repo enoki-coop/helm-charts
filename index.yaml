@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   enoki-mastodon:
   - apiVersion: v2
+    appVersion: v4.2.6
+    created: "2024-02-14T22:47:21.064519758Z"
+    dependencies:
+    - name: mastodon
+      repository: https://enoki-coop.github.io/helm-charts/
+      version: 4.0.10
+    - condition: global.install_operator
+      name: kubernetes-secret-generator
+      repository: https://helm.mittwald.de
+      version: 3.4.0
+    - name: postgresql
+      repository: ""
+      version: 0.2.0
+    - name: redis
+      repository: ""
+      version: 0.2.0
+    description: Mastodon deployment specific to Enoki
+    digest: 33f63ae33419ad6ef9e50bd5e74a2be4ca1c32c222c4e7491a410f2e542dce91
+    name: enoki-mastodon
+    type: application
+    urls:
+    - https://github.com/enoki-coop/helm-charts/releases/download/enoki-mastodon-0.3.10/enoki-mastodon-0.3.10.tgz
+    version: 0.3.10
+  - apiVersion: v2
     appVersion: v4.2.5
     created: "2024-02-01T20:52:50.13862769Z"
     dependencies:
@@ -338,6 +362,20 @@ entries:
     version: 0.1.1
   mastodon:
   - apiVersion: v2
+    appVersion: v4.2.6
+    created: "2024-02-14T22:47:21.257384321Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.13.3
+    description: Mastodon is a free, open-source social network server based on ActivityPub.
+    digest: 936fc5a048f7d3024f11616a9f7c64b7eb4b9fdca429b6ff6351d2b955b70073
+    name: mastodon
+    type: application
+    urls:
+    - https://github.com/enoki-coop/helm-charts/releases/download/mastodon-4.0.11/mastodon-4.0.11.tgz
+    version: 4.0.11
+  - apiVersion: v2
     appVersion: v4.2.5
     created: "2024-02-01T20:51:14.467519866Z"
     dependencies:
@@ -449,4 +487,4 @@ entries:
     urls:
     - https://github.com/enoki-coop/helm-charts/releases/download/mastodon-4.0.3/mastodon-4.0.3.tgz
     version: 4.0.3
-generated: "2024-02-01T20:52:50.138749417Z"
+generated: "2024-02-14T22:47:21.25751866Z"
