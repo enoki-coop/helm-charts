@@ -4,7 +4,7 @@ description: Mastodon deployment specific to Enoki
 
 type: application
 
-version: 0.3.11
+version: 0.3.12
 
 # renovate: image=ghcr.io/mastodon/mastodon
 appVersion: v4.2.7
