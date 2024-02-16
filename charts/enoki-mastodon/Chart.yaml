@@ -7,7 +7,7 @@ type: application
 version: 0.3.11
 
 # renovate: image=ghcr.io/mastodon/mastodon
-appVersion: v4.2.6
+appVersion: v4.2.7
 
 dependencies:
   - name: mastodon
