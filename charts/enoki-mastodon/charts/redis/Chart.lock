@@ -1,6 +1,6 @@
 dependencies:
 - name: redis-operator
   repository: https://ot-container-kit.github.io/helm-charts/
-  version: 0.14.3
-digest: sha256:16179d2e209e8b0975527ae9139505a29c827e072133132ad226bafe9b2dd89d
-generated: "2023-04-21T15:49:39.423882991Z"
+  version: 0.18.3
+digest: sha256:3d37efa129fe153b56c64b868b03fd5acc1fd6282c749cb3e811900c30dc32ce
+generated: "2024-09-19T14:16:49.967982676Z"
