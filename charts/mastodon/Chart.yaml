@@ -25,5 +25,5 @@ appVersion: v4.2.8
 
 dependencies:
 - name: common
-  version: 2.13.3
+  version: 2.26.0
   repository: https://charts.bitnami.com/bitnami
