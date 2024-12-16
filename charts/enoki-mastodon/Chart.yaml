@@ -20,4 +20,4 @@ dependencies:
   - name: postgresql
     version: "0.2.0"
   - name: redis
-    version: "0.2.0"
+    version: "10.5.7"
