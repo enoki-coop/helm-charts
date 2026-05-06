@@ -14,7 +14,7 @@ dependencies:
     version: "4.0.13"
     repository: https://enoki-coop.github.io/helm-charts/
   - name: kubernetes-secret-generator
-    version: "3.4.0"
+    version: "3.4.1"
     repository: "https://helm.mittwald.de"
     condition: global.install_operator
   - name: postgresql
